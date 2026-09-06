@@ -1,0 +1,18 @@
+Schriften dieser Website
+========================
+
+Cormorant Garamond  – Copyright 2015 the Cormorant Project Authors
+Manrope             – Copyright 2018 The Manrope Project Authors
+
+Beide stehen unter der SIL Open Font License, Version 1.1.
+Der volle Lizenztext liegt daneben: OFL-cormorantgaramond.txt und OFL-manrope.txt.
+
+Die Lizenz verlangt, dass Copyright-Hinweis und Lizenz bei jeder Weitergabe der
+Schriftdateien mitgeliefert werden. Genau dafuer liegen diese Dateien hier.
+Sie duerfen nicht geloescht werden, wenn die .woff2-Dateien weitergegeben werden.
+
+Keine Namensnennung auf der Website noetig, keine Gebuehr, keine Registrierung.
+
+Die Dateien stammen aus dem offiziellen Google-Fonts-Repository und werden von
+diesem Server ausgeliefert. Es besteht keine Verbindung mehr zu Google.
+Enthalten sind nur die Zeichensaetze "latin" und "latin-ext".
