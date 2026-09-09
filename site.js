@@ -151,10 +151,19 @@ document.addEventListener("error", function (e) {
   var fab = document.querySelector(".fab");
   var hasHero = !!document.querySelector(".hero");
 
+  var logo = document.querySelector(".brand--bild img");
+
   function onScroll() {
     var y = window.scrollY || document.documentElement.scrollTop;
     if (nav) nav.classList.toggle("solid", !hasHero || y > 40);
     if (fab) fab.classList.toggle("show", y > 500);
+    // Logo: über dem Titelbild fast doppelt so groß, schrumpft in den ersten 150 Pixeln
+    // Scrollweg stufenlos auf Leistenhöhe. Ohne Titelbild bleibt es klein.
+    if (logo) {
+      var gross = window.matchMedia("(max-width:900px)").matches ? 1.6 : 1.9;
+      var s = hasHero ? gross - (gross - 1) * Math.min(y / 150, 1) : 1;
+      logo.style.setProperty("--logo-s", s.toFixed(3));
+    }
   }
   onScroll();
   window.addEventListener("scroll", onScroll, { passive: true });
