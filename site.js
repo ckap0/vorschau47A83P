@@ -39,7 +39,9 @@ document.addEventListener("error", function (e) {
         var href = a.getAttribute("href");
         var m = href.match(/^([^?#]+)(\?[^#]*)?(#.*)?$/);
         if (!m) return;
-        a.setAttribute("href", m[1] + "?lang=" + lang + (m[3] || ""));
+        var q = (m[2] || "").replace(/^\?/, "").split("&").filter(function (p) { return p && p.indexOf("lang=") !== 0; });
+        q.push("lang=" + lang);
+        a.setAttribute("href", m[1] + "?" + q.join("&") + (m[3] || ""));
       } catch (e) {}
     });
     // <title> umschalten
@@ -136,18 +138,50 @@ document.addEventListener("error", function (e) {
   // Anfrageformular → öffnet eine vorbereitete E-Mail (kein Server nötig)
   var form = document.getElementById("inquiry");
   if (form) {
+    var an = form.querySelector("[name=arrival]"), ab = form.querySelector("[name=departure]");
+    var fehler = form.querySelector(".form-fehler");
+    function iso(d) { return d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2); }
+    if (an) an.min = iso(new Date());
+    function abMin() {
+      if (!an || !ab || !an.value) return;
+      var d = new Date(an.value); d.setDate(d.getDate() + 1); ab.min = iso(d);
+      if (ab.value && ab.value <= an.value) ab.value = ab.min;
+    }
+    // Hinweis sofort zeigen, wenn die Abreise nicht nach der Anreise liegt – die
+    // Browser-Prüfung (min) würde sonst nur ein knappes Tooltip anzeigen.
+    function pruefeDaten() {
+      if (!an || !ab || !fehler) return;
+      var falsch = an.value && ab.value && ab.value <= an.value;
+      fehler.hidden = !falsch;
+      if (falsch) fehler.textContent = html.getAttribute("data-lang") === "en" ? "The departure date must be after the arrival date." : "Die Abreise muss nach der Anreise liegen.";
+    }
+    if (an) { an.addEventListener("change", function () { abMin(); pruefeDaten(); }); abMin(); }
+    if (ab) ab.addEventListener("change", pruefeDaten);
+    // „Dieses Zimmer anfragen“ auf der Zimmerseite wählt das Zimmer vor
+    try {
+      var z = new URLSearchParams(location.search).get("zimmer");
+      var sel = form.querySelector("[name=room]");
+      var idx = { kaiserzeit: 0, sissy: 1, junior: 2 }[z];
+      if (sel && idx !== undefined) sel.selectedIndex = idx;
+    } catch (e) {}
     form.addEventListener("submit", function (ev) {
       ev.preventDefault();
       var d = new FormData(form);
-      var lang = html.getAttribute("data-lang");
-      var subject = (lang === "en" ? "Inquiry: " : "Anfrage: ") + d.get("room") + " " + d.get("arrival") + " – " + d.get("departure");
+      var en = html.getAttribute("data-lang") === "en";
+      pruefeDaten();
+      if (fehler && !fehler.hidden) { if (ab) ab.focus(); return; }
+      var t = function (de, e) { return en ? e : de; };
+      var subject = t("Anfrage: ", "Inquiry: ") + d.get("room") + " " + d.get("arrival") + " – " + d.get("departure");
       var body = [
-        (lang === "en" ? "Name: " : "Name: ") + d.get("name"),
-        (lang === "en" ? "E-mail: " : "E-Mail: ") + d.get("email"),
-        (lang === "en" ? "Arrival: " : "Anreise: ") + d.get("arrival"),
-        (lang === "en" ? "Departure: " : "Abreise: ") + d.get("departure"),
-        (lang === "en" ? "Guests: " : "Personen: ") + d.get("guests"),
-        (lang === "en" ? "Room: " : "Zimmer: ") + d.get("room"),
+        "Name: " + d.get("name"),
+        t("E-Mail: ", "E-mail: ") + d.get("email"),
+        t("Telefon: ", "Phone: ") + (d.get("phone") || "–"),
+        t("Anreise: ", "Arrival: ") + d.get("arrival"),
+        t("Abreise: ", "Departure: ") + d.get("departure"),
+        t("Personen: ", "Guests: ") + d.get("guests"),
+        t("Zimmer: ", "Room: ") + d.get("room"),
+        t("Verpflegung: ", "Board: ") + d.get("board"),
+        t("Hund: ", "Dog: ") + (d.get("dog") ? t("ja", "yes") : t("nein", "no")),
         "",
         d.get("message") || ""
       ].join("\n");

@@ -84,6 +84,11 @@ html.js .reveal:not(.in){opacity:0;transform:translateY(28px)}
 .lang{display:flex;border:1px solid rgba(232,214,164,.55);border-radius:999px;overflow:hidden;background:rgba(23,53,42,.35);backdrop-filter:blur(6px)}
 .lang button{background:none;border:0;color:var(--licht);font:inherit;font-size:.82rem;font-weight:600;padding:.4rem .8rem;cursor:pointer;transition:background .3s,color .3s}
 .lang button[aria-pressed="true"]{background:var(--gold);color:var(--tanne)}
+/* „Anfragen & Buchen“ als goldener Knopf im Menü */
+.menu>li>a.cta{background:var(--gold);color:var(--tanne);padding:.45rem 1rem;border-radius:999px;font-weight:700;text-shadow:none!important}
+.menu>li>a.cta::after{display:none}
+.menu>li>a.cta:hover{background:var(--gold-hell)}
+body[data-seite="anfragen"] .fab{display:none}
 .burger{display:none;background:rgba(23,53,42,.35);border:1px solid rgba(232,214,164,.55);color:var(--licht);border-radius:999px;padding:.45rem .9rem;font:inherit;font-size:.85rem;cursor:pointer}
 /* ---------- Untermenü: Bildkacheln ----------
    Ein Markup, zwei Darstellungen. Am Rechner klappt es als Feld über die volle
@@ -137,6 +142,7 @@ html.js .reveal:not(.in){opacity:0;transform:translateY(28px)}
   .menu.open{opacity:1;transform:none;visibility:visible}
   .menu>li>a{display:block;padding:.85rem 0;font-size:1.15rem;border-bottom:1px solid rgba(255,255,255,.08)}
   .menu>li>a::after{display:none}
+  .menu>li>a.cta{display:inline-block;margin:1rem 0 .4rem;padding:.75rem 1.4rem;border-bottom:0;font-size:1.05rem}
   .burger{display:inline-block}
   /* Untermenü wächst in der Liste auf. Der 0fr-Trick verlangt genau ein Kind –
      deshalb liegt das Gitter in einem eigenen Kasten. */
@@ -260,6 +266,8 @@ html.js .timeline:not(.in) li{opacity:0;transform:translateY(16px)}
 .strip li{flex:0 0 min(78vw,520px);scroll-snap-align:start;margin:0}
 .strip img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:var(--r);-webkit-user-drag:none}
 /* Ziehen mit der Maus */
+.strip .cap{display:block;margin-top:.45rem;font-size:.85rem;color:var(--grau)}
+.section--dark .strip .cap,.section--moos .strip .cap{color:var(--gold-hell)}
 .strip.zieht{cursor:grabbing;scroll-snap-type:none;user-select:none}
 .strip.zieht img{pointer-events:none}
 
@@ -275,7 +283,9 @@ html.js .timeline:not(.in) li{opacity:0;transform:translateY(16px)}
 .room ul{padding-left:0;margin:.8rem 0 1.6rem;list-style:none}
 .room li{margin:.35rem 0;padding-left:1.4rem;position:relative}
 .room li::before{content:"";position:absolute;left:0;top:.65em;width:.5rem;height:.5rem;border-radius:50%;background:var(--gold)}
-.thumbs{display:grid;grid-template-columns:repeat(4,1fr);gap:.6rem;margin-top:.6rem}
+/* bis zu zwölf Fotos je Zimmer: sechs pro Zeile, auf dem Handy vier */
+.thumbs{display:grid;grid-template-columns:repeat(6,1fr);gap:.6rem;margin-top:.6rem}
+@media (max-width:640px){.thumbs{grid-template-columns:repeat(4,1fr)}}
 .thumbs button{padding:0;border:2px solid transparent;border-radius:var(--r-sm);overflow:hidden;background:none;cursor:pointer;transition:transform .3s var(--ease),border-color .3s}
 .thumbs button:hover{transform:translateY(-3px)}
 .thumbs button[aria-pressed="true"]{border-color:var(--gold)}
@@ -355,6 +365,52 @@ address{font-style:normal;line-height:1.7}
 .karte p{font-size:.94rem;margin:0;color:var(--grau)}
 .section--dark .karte,.section--moos .karte{background:rgba(255,255,255,.06);border-color:rgba(232,214,164,.18);border-left-color:var(--gold)}
 .section--dark .karte p,.section--moos .karte p{color:var(--gold-hell)}
+
+/* ---------- Bad Gastein: vier Gruppen mit je drei Fotokacheln ---------- */
+.gruppe{margin-top:3rem}
+.gruppe-kopf{display:flex;flex-wrap:wrap;align-items:baseline;gap:.3rem 1.2rem;margin-bottom:1rem}
+.gruppe-kopf h3{margin:0;font-size:clamp(1.6rem,2.6vw,2.1rem)}
+.gruppe-kopf h3 a{text-decoration:none;color:inherit;border-bottom:1px solid var(--gold);transition:color .3s}
+.gruppe-kopf h3 a:hover{color:var(--moos)}
+.gruppe-kopf p{margin:0;color:var(--grau);font-size:.9rem}
+.kacheln3{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem}
+.ktile{display:flex;flex-direction:column;text-decoration:none;color:inherit;background:rgba(255,255,255,.6);
+  border:1px solid rgba(23,53,42,.1);border-radius:var(--r);overflow:hidden;
+  transition:transform .4s var(--ease),box-shadow .4s var(--ease),opacity .9s var(--ease)}
+.ktile:hover{transform:translateY(-4px);box-shadow:0 18px 40px -22px rgba(23,53,42,.55)}
+.ktile .bild{display:block;overflow:hidden;background:var(--moos)}
+.ktile img{width:100%;aspect-ratio:4/3;object-fit:cover;transition:transform 1s var(--ease)}
+.ktile:hover img{transform:scale(1.05)}
+.ktile .text{display:block;padding:1rem 1.1rem 1.2rem}
+.ktile strong{display:block;font-family:var(--serif);font-weight:500;font-size:1.35rem;line-height:1.15;margin-bottom:.35rem}
+.ktile .text>span{font-size:.92rem;line-height:1.5;color:var(--grau)}
+@media (max-width:900px){.kacheln3{grid-template-columns:1fr 1fr}}
+@media (max-width:560px){.kacheln3{grid-template-columns:1fr}}
+
+/* ---------- Anfragen & Buchen ---------- */
+.buchung{margin-top:1.5rem;min-height:12rem;padding:.75rem;background:#fff;border:1px solid rgba(23,53,42,.12);border-radius:var(--r)}
+.buchung iframe{border-radius:var(--r-sm)}
+.form-fehler{margin:0;padding:.6rem .9rem;border-left:3px solid #8A2F1D;background:rgba(138,47,29,.08);color:#6B2416;border-radius:0 var(--r-sm) var(--r-sm) 0;font-size:.9rem}
+label.check{display:flex;align-items:center;gap:.6rem;align-self:end;padding:.85rem 0;font-weight:500}
+label.check input{width:1.2rem;height:1.2rem;margin:0;accent-color:var(--moos)}
+.stimmen{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-top:2.5rem}
+.stimmen blockquote{margin:0;padding:1.5rem 1.6rem;border-left:2px solid var(--gold);background:rgba(255,255,255,.05);border-radius:0 var(--r) var(--r) 0}
+.stimmen blockquote:first-child{grid-column:1 / -1}
+.stimmen p{font-family:var(--serif);font-size:1.2rem;line-height:1.45;max-width:none;margin:0}
+.stimmen footer{margin-top:.9rem;font-size:.85rem;letter-spacing:.06em;color:var(--gold-hell)}
+@media (max-width:700px){.stimmen{grid-template-columns:1fr}}
+
+/* ---------- Optionaler Abschnitt: sichtbar gekennzeichnet, bis der Betreiber freigibt ---------- */
+.optional{position:relative;margin-top:3rem;padding:2.2rem 1.6rem 1.6rem;border:2px dashed var(--gold);border-radius:var(--r);background:rgba(198,161,91,.07)}
+.optional>.badge{position:absolute;top:-.85rem;left:1.2rem;background:var(--gold);color:var(--tanne);border-color:var(--gold);font-weight:700;pointer-events:auto}
+.optional h2{font-size:clamp(1.7rem,3vw,2.4rem)}
+.optional h3{font-size:1.3rem;margin-top:1.4rem}
+.optional .spalten{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem 2rem}
+/* Partner mit Knopf (Skipass, Skiverleih, Skischule) */
+.karte .btn{margin-top:1rem;font-size:.85rem;padding:.7rem 1.2rem}
+/* Festtagskarten */
+.karten-pdf{display:flex;flex-wrap:wrap;gap:.8rem;margin-top:1rem}
+.hinweis{font-size:.85rem;color:var(--grau)}
 
 /* ---------- Rechtstexte: schmale Spalte, ruhige Typografie ---------- */
 .section--schmal{padding-top:9rem}
