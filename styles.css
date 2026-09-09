@@ -290,7 +290,16 @@ html.js .timeline:not(.in) li{opacity:0;transform:translateY(16px)}
 .thumbs button:hover{transform:translateY(-3px)}
 .thumbs button[aria-pressed="true"]{border-color:var(--gold)}
 .thumbs img{aspect-ratio:1;object-fit:cover;width:100%}
-@media (max-width:900px){.room,.room:nth-child(even){grid-template-columns:1fr}.room:nth-child(even) > :first-child{order:0}}
+@media (max-width:900px){
+  .room,.room:nth-child(even){grid-template-columns:1fr;gap:1rem}
+  .room:nth-child(even) > :first-child{order:0}
+  /* Auf dem Handy steht der Zimmertitel vor den Fotos: die beiden Spalten lösen sich
+     auf (display:contents), der Titel rückt per order nach vorn. */
+  .room > div{display:contents}
+  .room h2{order:-1;margin-bottom:.1rem}
+  .room .thumbs{margin-top:0}
+  .room p:first-of-type{margin-top:.6rem}
+}
 
 /* Kacheln – Bild zoomt, Text hebt sich */
 .tiles{display:grid;grid-template-columns:repeat(2,1fr);gap:1.2rem}
