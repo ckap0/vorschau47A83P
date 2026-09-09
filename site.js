@@ -1,4 +1,4 @@
-/* Villa Solitude – Sprachumschaltung, Menü, Anfrageformular */
+/* Villa Solitude – Menü, Anfrageformular, Bewegung */
 document.documentElement.classList.add("js");
 // Sicherheitsnetz: nur falls das Einblenden weiter unten gar nicht erst anläuft
 // (alter Browser, Skriptfehler) – sonst würde es die Scroll-Animation aushebeln.
@@ -15,54 +15,8 @@ document.addEventListener("error", function (e) {
 (function () { try {
   var html = document.documentElement;
 
-  function getLang() {
-    var q = null;
-    try { q = new URLSearchParams(location.search).get("lang"); } catch (e) {}
-    if (q === "en" || q === "de") return q;
-    try { var s = localStorage.getItem("vs-lang"); if (s === "en" || s === "de") return s; } catch (e) {}
-    return (navigator.language || "de").toLowerCase().indexOf("de") === 0 ? "de" : "en";
-  }
-
-  // merken: nur wenn die Besucherin die Sprache selbst umschaltet. Beim bloßen
-  // Aufrufen der Seite wird nichts auf dem Gerät abgelegt – das erspart eine
-  // Einwilligung nach § 165 TKG, weil kein Speicherzugriff ohne Anlass erfolgt.
-  function setLang(lang, merken) {
-    html.setAttribute("data-lang", lang);
-    html.setAttribute("lang", lang);
-    if (merken) { try { localStorage.setItem("vs-lang", lang); } catch (e) {} }
-    document.querySelectorAll(".lang button").forEach(function (b) {
-      b.setAttribute("aria-pressed", b.dataset.lang === lang ? "true" : "false");
-    });
-    // Sprache in interne Links mitnehmen
-    document.querySelectorAll('a[href$=".html"], a[href*=".html#"], a[href*=".html?"]').forEach(function (a) {
-      try {
-        var href = a.getAttribute("href");
-        var m = href.match(/^([^?#]+)(\?[^#]*)?(#.*)?$/);
-        if (!m) return;
-        var q = (m[2] || "").replace(/^\?/, "").split("&").filter(function (p) { return p && p.indexOf("lang=") !== 0; });
-        q.push("lang=" + lang);
-        a.setAttribute("href", m[1] + "?" + q.join("&") + (m[3] || ""));
-      } catch (e) {}
-    });
-    // <title> umschalten
-    var t = document.querySelector("title");
-    if (t && t.dataset[lang]) t.textContent = t.dataset[lang];
-    // Auswahllisten umschalten – in <option> kann kein <span> stehen, also über data-Attribute
-    document.querySelectorAll("option[data-de]").forEach(function (o) {
-      var neu = o.dataset[lang];
-      if (!neu) return;
-      var warGewaehlt = o.selected;
-      o.textContent = neu;
-      o.value = neu;
-      o.selected = warGewaehlt;
-    });
-  }
-
-  setLang(getLang(), false);
-
-  document.querySelectorAll(".lang button").forEach(function (b) {
-    b.addEventListener("click", function () { setLang(b.dataset.lang, true); });
-  });
+  // Sprache: Deutsch liegt im Wurzelordner, Englisch unter en/ – der Schalter oben
+  // rechts ist ein Link. data-lang steht fest im HTML und wird unten nur gelesen.
 
   // Mobiles Menü
   var burger = document.querySelector(".burger");

@@ -82,8 +82,12 @@ html.js .reveal:not(.in){opacity:0;transform:translateY(28px)}
 .menu>li>a::after{content:"";position:absolute;left:0;right:0;bottom:-2px;height:2px;background:var(--gold);transform:scaleX(0);transform-origin:left;transition:transform .35s var(--ease)}
 .menu>li>a:hover::after,.menu>li>a[aria-current="page"]::after{transform:scaleX(1)}
 .lang{display:flex;border:1px solid rgba(232,214,164,.55);border-radius:999px;overflow:hidden;background:rgba(23,53,42,.35);backdrop-filter:blur(6px)}
-.lang button{background:none;border:0;color:var(--licht);font:inherit;font-size:.82rem;font-weight:600;padding:.4rem .8rem;cursor:pointer;transition:background .3s,color .3s}
-.lang button[aria-pressed="true"]{background:var(--gold);color:var(--tanne)}
+.lang a,.lang button{display:inline-block;background:none;border:0;color:var(--licht);font:inherit;font-size:.82rem;font-weight:600;padding:.4rem .8rem;cursor:pointer;text-decoration:none;transition:background .3s,color .3s}
+.lang a[aria-current],.lang button[aria-pressed="true"]{background:var(--gold);color:var(--tanne)}
+/* Bildmarke: das Logo der alten Website auf weißer Karte. TODO: höher aufgelöste
+   oder vektorisierte Fassung vom Betreiber, dann ohne Karte in Weiß aufs Grün. */
+.brand--bild img{height:54px;width:auto;display:block;background:#fff;padding:4px 10px;border-radius:6px;box-shadow:0 6px 18px -8px rgba(0,0,0,.6)}
+@media (max-width:900px){.brand--bild img{height:46px;padding:3px 8px}}
 /* „Anfragen & Buchen“ als goldener Knopf im Menü */
 .menu>li>a.cta{background:var(--gold);color:var(--tanne);padding:.45rem 1rem;border-radius:999px;font-weight:700;text-shadow:none!important}
 .menu>li>a.cta::after{display:none}
@@ -360,6 +364,10 @@ address{font-style:normal;line-height:1.7}
 .footer a:hover{border-bottom-color:var(--gold)}
 .footer ul{list-style:none;padding:0;margin:0}
 .footer li{margin:.4rem 0}
+.footer .partner{display:flex;flex-wrap:wrap;align-items:center;gap:1.5rem 2.5rem;margin-top:2.5rem;padding-top:1.5rem;border-top:1px solid rgba(255,255,255,.12)}
+.footer .partner img{height:46px;width:auto;filter:invert(1) grayscale(1);mix-blend-mode:screen;opacity:.85;transition:opacity .3s}
+.footer .partner img.badge-img{height:64px;filter:none;mix-blend-mode:normal;background:#fff;border-radius:6px;padding:3px}
+.footer .partner a:hover img{opacity:1}
 .footer .legal{margin-top:2.5rem;padding-top:1.2rem;border-top:1px solid rgba(255,255,255,.12);font-size:.82rem;color:#B8C4BB}
 .footer .legal p{max-width:none}
 @media (max-width:900px){.footer .cols{grid-template-columns:1fr}}
